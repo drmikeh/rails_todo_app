@@ -141,3 +141,110 @@ git commit -m "Configured for Bootstrap SASS"
 git tag step4
 ```
 
+### Step 5 - Create a Static Pages Controller and Views, the NavBar, and Flash Messages
+
+```bash
+rails g controller static_pages home about
+```
+
+Edit `config/routes.rb` and replace the `static_pages` routes with the following:
+
+```ruby
+  root to: 'static_pages#home'
+  match '/about', to: 'static_pages#about', via: 'get'
+```
+
+Edit `app/views/static_pages/home.html.erb` and replace the content with:
+
+```html
+<div class="text-center jumbotron">
+  <h1>Welcome to the TODO App</h1>
+  <h3>This is the home page for the Rails TODO App with AuthN and AuthZ.</h3>
+  <br/>
+</div>
+```
+
+Edit `app/views/static_pages/about.html.erb` and replace the content with:
+
+```html
+<% provide(:title, 'About') %>
+<h2>A Simple TODO App with User Authentication</h2>
+<h4>Technologies include:</h4>
+<ul>
+  <li>Ruby 2.2</li>
+  <li>Rails 4.2</li>
+  <li>PostgreSQL 9.4</li>
+  <li>Bootstrap 3.3</li>
+</ul>
+```
+
+Edit `app/views/layouts/application.html.erb` to set a dynamic title and
+replace the body with that provided below:
+
+```html
+    <title><%= full_title(yield(:title)) %></title>
+```
+
+```html
+  <body>
+    <header>
+      <%= render 'layouts/navigation' %>
+    </header>
+    <main role="main">
+       <%= render 'layouts/messages' %>
+       <%= yield %>
+    </main>
+  </body>
+```
+
+Create the file `app/views/layouts/_navigation.html.erb` with the following content:
+
+```html
+<%# navigation styled for Bootstrap 3.0 %>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to 'Home', root_path, class: 'navbar-brand' %>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <%= render 'layouts/navigation_links' %>
+      </ul>
+    </div>
+  </div>
+</nav>
+```
+
+Create the file `app/views/layouts/_navigation_links.html.erb` with the following content:
+
+```html
+<li><%= link_to 'About', '/about' %></li>
+```
+
+Create the file `app/views/layouts/_messages.html.erb`:
+
+```html
+<%# Rails flash messages styled for Bootstrap 3.0 %>
+<% flash.each do |name, msg| %>
+  <% if msg.is_a?(String) %>
+    <div class="alert alert-<%= name.to_s == 'notice' ? 'success' : 'danger' %>">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= content_tag :div, msg, :id => "flash_#{name}" %>
+    </div>
+  <% end %>
+<% end %>
+```
+
+Commit your changes:
+
+```bash
+git add -A
+git commit -m "Added static pages, navbar, and flash messages."
+git tag step5
+```
