@@ -655,8 +655,8 @@ and add the following:
 
 8j. Edit `app/controllers/todos_controller.rb`:
 
-  - add `before_action :signed_in_user`
-  - edit the `create` method:
+* add `before_action :signed_in_user`
+* edit the `create` method:
 
 ```ruby
   def index
@@ -664,7 +664,7 @@ and add the following:
   end
 ```
 
-  - add the user to a newly created Todo:
+ * add the user to a newly created Todo:
 
 ```ruby
   def create
