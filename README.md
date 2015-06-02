@@ -703,3 +703,49 @@ git add -A
 git commit -m "Create the Sessions Controller, Sessions Helper, and navigation links."
 git tag step8
 ```
+
+### Step 9 - Add a Nice Bootswatch Theme
+
+> Note: since we are using SASS it is best to use a SASSy version of the
+Bootswatch themes. You can learn about these at:
+[Bootswatch SCSS](https://github.com/log0ymxm/bootswatch-scss)
+
+9a. Create the following files:
+
+* _superhero-variables.scss - content from [Superhero Variables](https://raw.githubusercontent.com/log0ymxm/bootswatch-scss/master/superhero/_variables.scss)
+* _superhero.scss - content from [Superhero Overrides](https://github.com/log0ymxm/bootswatch-scss/blob/master/superhero/_bootswatch.scss)
+
+9b. Modify the imports in `app/assets/stylesheets/application.css.scss`:
+
+```sass
+@import "superhero-variables.scss";
+@import "bootstrap-variables.scss";
+@import "bootstrap-custom.scss";
+@import "bootstrap-sprockets.scss";
+@import "bootstrap.scss";
+@import "superhero.scss";
+```
+
+9c. Modify `app/views/todos/index.html.erb` and replace
+
+```html
+<table class="table table-striped table-bordered table-hover">
+```
+
+with
+
+```html
+<table class="table table-hover">
+```
+
+### Additional Bonus LAB Material
+
+* Change the UX:
+  - Add a nice background image.
+  - Try using other Bootswatch themes.
+  - Change the NavBar.
+* Add some more information to a user, such as `phone`, `city` and `state`, `occupation`, etc.
+* Add some more attributes to a TODO, such as a `due_date` and a `priority`.
+* Add a set of `keywords` to a Todo. There should be a `many-to-many` relationship
+  between `todos` and `keywords` and the code should *not* create duplicate keywords.
+* Replace the manual authentication with a gem like [devise](http://devise.plataformatec.com.br/).

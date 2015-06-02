@@ -1,8 +1,10 @@
 // "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "superhero-variables.scss";
 @import "bootstrap-variables.scss";
 @import "bootstrap-custom.scss";
 @import "bootstrap-sprockets.scss";
 @import "bootstrap.scss";
+@import "superhero.scss";
 
 body {
   padding-top: $navbar-height + 10px;
