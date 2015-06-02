@@ -39,3 +39,29 @@ git add -A
 git commit -m "Added gems."
 git tag step2
 ```
+
+### Step 3 - Configure Scaffold Generator
+
+Install the custom templates:
+
+```bash
+rails generate bootstrap:install -f
+```
+
+Add the following to `config/application.rb`:
+
+```ruby
+module TodoApp
+  class Application < Rails::Application
+
+    config.generators do |g|
+      g.orm             :active_record
+      g.template_engine :erb
+    end
+```
+
+```bash
+git add -A
+git commit -m "Configured custom templates for Scaffolding"
+git tag step3
+```
