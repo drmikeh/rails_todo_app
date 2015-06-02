@@ -248,3 +248,100 @@ git add -A
 git commit -m "Added static pages, navbar, and flash messages."
 git tag step5
 ```
+
+### Step 6 - Add MVC CRUD for the TODOs
+
+Generate the MVC CRUD for TODOs:
+
+```bash
+rails g scaffold todo title:string completed:boolean
+rake db:migrate
+```
+
+> Inspect the `config/routes.rb` file. A single line was added to configure
+the 7 routes for our TODOs resource. That's nice!!!
+
+Edit `app/models/todo.rb` and add the following:
+
+```ruby
+class Todo < ActiveRecord::Base
+  validates :title, presence: true
+
+  before_save :default_values
+
+  private
+
+  def default_values
+    self.completed ||= false
+    nil                           # required so that TX will not rollback!!!
+  end
+end
+```
+
+Edit `app/views/layouts/_navigation_links.html.erb` and add a link to our todos view:
+
+```html
+  <li><%= link_to 'TODOs', todos_path %></li>
+```
+
+Edit `app/views/todos/index.html.erb` and
+
+* edit the `<h1>` tag
+* add a `todos` CSS class to the outer `div`
+* add the `Show`, `Edit`, and `Destroy` labels on the table headers
+* replace the boolean `completed` value with an icon
+
+```html
+<h1>Here are your TODOs</h1>
+...
+<div class="table-responsive todos">
+...
+        <th>Show</th>
+        <th>Edit</th>
+        <th>Destroy</th>
+...
+          <% if todo.completed %>
+          <td><span class="glyphicon glyphicon-ok"></span></td>
+          <% else %>
+          <td></td>
+          <% end %>
+```
+
+Edit `app/views/todos/show.html.erb` and add the created_at attribute:
+
+```html
+  <dt>Created:</dt>
+  <dd><%= @todo.created_at %></dd>
+```
+
+Edit `app/controllers/todos_controller.rb`
+
+* replace
+`@todos = Todo.all` with
+`@todos = Todo.order(created_at: :desc)`
+
+* replace all occurrances of
+`redirect_to @todo` and `redirect_to todos_url` with
+`redirect_to todos_path`
+
+Commit your changes:
+
+```bash
+git add -A
+git commit -m "Created MVC CRUD for a list of TODOs."
+git tag step6
+```
+
+### Intermission
+
+Let's reflect on what we have done:
+
+* Created a Rails app
+* Added some favorite gems
+* Added custom scaffolding templates
+* Configured for Bootrap and SASS
+* Created some static pages, a navbar, and flash message support
+* Created MVC CRUD for a list of TODOs
+
+But we have one *major* problem: how do we support multiple users each with
+their own TODO list?
