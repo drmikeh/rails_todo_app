@@ -1,10 +1,11 @@
 class TodosController < ApplicationController
+  before_action :signed_in_user
   before_action :set_todo, only: [:show, :edit, :update, :destroy]
 
   # GET /todos
   # GET /todos.json
   def index
-    @todos = Todo.order(created_at: :desc)
+    @todos = current_user.todos.order(created_at: :desc)
   end
 
   # GET /todos/1
@@ -25,6 +26,7 @@ class TodosController < ApplicationController
   # POST /todos.json
   def create
     @todo = Todo.new(todo_params)
+    @todo.user = current_user       # associate the new todo to the current_user
 
     respond_to do |format|
       if @todo.save

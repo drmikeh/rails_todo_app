@@ -115,11 +115,11 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 main {
-  margin: 20px;
+  margin: 20px auto;
+  width: 800px;
 }
 
 .todos {
-  max-width: 800px;
   th, td {
     text-align:center
   }
@@ -471,18 +471,24 @@ following line:
 ```bash
 git add -A
 git commit -m "Added MVC CRUD for User"
-git tag step6
+git tag step7
 ```
 
-### What's Left
+### Step 8 - Create a Sessions Controller
 
-* Create `app/controllers/sessions_controller.rb` and `app/views/sessions/new.html.erb`
+8a. Create `app/controllers/sessions_controller.rb` and `app/views/sessions/new.html.erb`
 
 ```bash
 rails g controller sessions new create destroy
 ```
 
-Edit `app/views/sessions/new.html.erb` and insert the following content:
+8b. Remove the files `app/views/sessions/create.html.erb` and `app/views/sessions/destroy.html.erb`
+
+```bash
+rm app/views/sessions/create.html.erb app/views/sessions/destroy.html.erb
+```
+
+8c. Edit `app/views/sessions/new.html.erb` and insert the following content:
 
 ```html
 <% provide(:title, "Sign in") %>
@@ -506,12 +512,93 @@ Edit `app/views/sessions/new.html.erb` and insert the following content:
 </div>
 ```
 
-* Create SessionsHelper module
+8d. Add the following to `app/helpers/sessions_helper.rb`:
 
-Nx. Edit `app/controllers/users_controller.rb`:
+```ruby
+module SessionsHelper
 
-* modify the `create` method to call the `sign_in` helper method that we will
-  soon write and change the `redirect_to` target path and notice:
+  def sign_in(user)
+    # save a cookie on their computer
+    remember_token = User.new_remember_token
+    cookies.permanent[:remember_token] = remember_token
+    # update our database with their cookie info
+    user.update_attribute(:remember_token, User.digest(remember_token))
+    # set a current_user variable equal to user
+    self.current_user = user
+  end
+
+  def signed_in?
+    !current_user.nil?
+  end
+
+  def current_user=(user)
+    @current_user = user
+  end
+
+  def current_user
+    remember_token  = User.digest(cookies[:remember_token])
+    @current_user ||= User.find_by(remember_token: remember_token)
+  end
+
+  def current_user?(user)
+    user == current_user
+  end
+
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, notice: "Please sign in."
+    end
+  end
+
+  def sign_out
+    current_user.update_attribute(:remember_token,
+                                  User.digest(User.new_remember_token))
+    cookies.delete(:remember_token)
+    self.current_user = nil
+  end
+
+  def redirect_back_or(default)
+    redirect_to(session[:return_to] || default)
+    session.delete(:return_to)
+  end
+
+  def store_location
+    session[:return_to] = request.url if request.get?
+  end
+end
+```
+
+8e. Edit `app/controllers/sessions_controller.rb` to be the following:
+
+```ruby
+class SessionsController < ApplicationController
+
+  def new
+  end
+
+  def create
+    user = User.find_by(email: params[:session][:email].downcase)
+    if user && user.authenticate(params[:session][:password])
+      sign_in user
+      redirect_back_or todos_path
+    else
+      flash.now[:error] = 'Invalid email/password combination'
+      render 'new'
+    end
+  end
+
+  def destroy
+    sign_out
+    redirect_to root_url
+  end
+end
+```
+
+8f. Edit `app/controllers/users_controller.rb`:
+
+* modify the `create` method to call the `sign_in` helper method
+  and change the `redirect_to` target path and notice:
 
 ```ruby
   def create
@@ -530,8 +617,20 @@ Nx. Edit `app/controllers/users_controller.rb`:
   end
 ```
 
+8g. Edit `config/routes.rb` and replace
 
-* Edit `config/routes.rb` and add the following:
+```ruby
+  get 'sessions/new'
+  get 'sessions/create'
+  get 'sessions/destroy'
+```
+with
+
+```ruby
+  resources :sessions, only:[:new, :create, :destroy]
+```
+
+and add the following:
 
 ```ruby
   match '/signup',  to: 'users#new',            via: 'get'
@@ -539,13 +638,13 @@ Nx. Edit `app/controllers/users_controller.rb`:
   match '/signout', to: 'sessions#destroy',     via: 'delete'
 ```
 
-* Edit `app/controllers/application_controller.rb` and add the following line:
+8h. Edit `app/controllers/application_controller.rb` and add the following line:
 
 ```ruby
   include SessionsHelper
 ```
 
-* Edit `app/controllers/static_pages_controller.rb` and add a redirect to the
+8i. Edit `app/controllers/static_pages_controller.rb` and add a redirect to the
   `home` action:
 
 ```ruby
@@ -554,8 +653,17 @@ Nx. Edit `app/controllers/users_controller.rb`:
   end
 ```
 
-* Edit `app/controllers/todos_controller.rb`:
+8j. Edit `app/controllers/todos_controller.rb`:
+
   - add `before_action :signed_in_user`
+  - edit the `create` method:
+
+```ruby
+  def index
+    @todos = current_user.todos.order(created_at: :desc)
+  end
+```
+
   - add the user to a newly created Todo:
 
 ```ruby
@@ -565,24 +673,33 @@ Nx. Edit `app/controllers/users_controller.rb`:
     ...
 ```
 
-* Update `app/views/layouts/_navigation_links.html.erb`:
+8k. Update `app/views/layouts/_navigation_links.html.erb` to match the following:
 
 ```html
 <% if signed_in? %>
+  <li><%= link_to 'TODOs', todos_path %></li>
   <li><%= link_to @current_user, user_path(@current_user) %></li>
   <li><%= link_to 'Sign out', signout_path, method: 'delete' %></li>
 <% else %>
   <li><%= link_to 'Sign up', signup_path %></li>
   <li><%= link_to 'Sign in', signin_path %></li>
 <% end %>
+<li><%= link_to 'About', '/about' %></li>
 ```
 
-* Edit `app/views/static_pages/home.html.erb` and add the following buttons
+8l. Edit `app/views/static_pages/home.html.erb` and add the following buttons
   to the bottom of the jumbotron:
 
 ```html
+  <br/>
   <%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
   <%= link_to "Sign in",      signin_path, class: "btn btn-large btn-primary" %>
 ```
 
+8m. Commit your changes:
 
+```bash
+git add -A
+git commit -m "Create the Sessions Controller, Sessions Helper, and navigation links."
+git tag step8
+```
