@@ -1,4 +1,6 @@
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
 @import "bootstrap-variables.scss";
+@import "bootstrap-custom.scss";
 @import "bootstrap-sprockets.scss";
 @import "bootstrap.scss";
 
@@ -20,4 +22,15 @@ input[type="radio"], input[type="checkbox"] {
   width: initial;
   height: initial;
   margin-top: 7px;
+}
+
+main {
+  margin: 20px;
+}
+
+.todos {
+  max-width: 800px;
+  th, td {
+    text-align:center
+  }
 }
