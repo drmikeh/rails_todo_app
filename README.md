@@ -3,7 +3,17 @@
 This is a simple Rails App for a TODO list. The steps below will demonstrate
 how to create this project from scratch:
 
-[`Step 1 - Generate The Project`](#Step-1---Generate-The-Project)
+* [`Step 1 - Generate The Project`](#step-1---generate-the-project)
+* [`Step 2 - Add Gems`](#step-2---add-gems)
+* [`Step 3 - Configure Scaffold Generator`](#step-3---configure-scaffold-generator)
+* [`Step 4 - Configure Project for Bootstrap SASS`](#step-4---configure-project-for-bootstrap-sass)
+* [`Step 5 - Create a Static Pages Controller and Views, the NavBar, and Flash Messages`](#step-5---create-a-static-pages-controller-and-views-the-navbar-and-flash-messages)
+* [`Step 6 - Add MVC CRUD for the TODOs`](#step-6---add-mvc-crud-for-the-todos)
+* [`Intermission`](#intermission)
+* [`Step 7 - Add MVC CRUD for User`](#step-7---add-mvc-crud-for-user)
+* [`Step 8 - Create a Sessions Controller`](#step-8---create-a-sessions-controller)
+* [`Step 9 - Add a Nice Bootswatch Theme`](#step-8---create-a-sessions-controller)
+* [`Bonus LAB Material`](#bonus-lab-material)
 
 ## Steps to reproduce
 
@@ -743,7 +753,7 @@ with
 <table class="table table-hover">
 ```
 
-### Additional Bonus LAB Material
+### Bonus LAB Material
 
 * Check for security holes and fix them:
   - See what routes a user can manually enter into the browser even if the
