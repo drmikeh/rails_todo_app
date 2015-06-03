@@ -1,4 +1,9 @@
-# TODO CRUD App in Rails with Manual AuthN and Associations
+# TODO CRUD App in Rails
+
+This is a simple Rails App for a TODO list. The steps below will demonstrate
+how to create this project from scratch:
+
+[`Step 1 - Generate The Project`](#Step-1---Generate-The-Project)
 
 ## Steps to reproduce
 
