@@ -1,5 +1,6 @@
 class TodosController < ApplicationController
   before_action :signed_in_user
+  before_action :correct_user, only: [:show, :edit, :update, :destroy]
   before_action :set_todo, only: [:show, :edit, :update, :destroy]
 
   # GET /todos
@@ -71,5 +72,10 @@ class TodosController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def todo_params
       params.require(:todo).permit(:title, :completed)
+    end
+
+    def correct_user
+      @todo = current_user.todos.find_by(id: params[:id])
+      redirect_to root_url if @todo.nil?
     end
 end
