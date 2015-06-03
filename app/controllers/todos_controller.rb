@@ -27,7 +27,6 @@ class TodosController < ApplicationController
   def create
     @todo = Todo.new(todo_params)
     @todo.user = current_user       # associate the new todo to the current_user
-
     respond_to do |format|
       if @todo.save
         format.html { redirect_to todos_path, notice: 'Todo was successfully created.' }

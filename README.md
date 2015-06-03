@@ -103,7 +103,7 @@ mv app/assets/stylesheets/bootstrap-variables.scss app/assets/stylesheets/_boots
 4b. Remove *everything* from `application.scss` and replace it with the following:
 
 ```sass
-// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+// "bootstrap-sprockets" must be imported before "bootstrap" for the icon fonts to work.
 @import "bootstrap-variables.scss";
 @import "bootstrap-custom.scss";
 @import "bootstrap-sprockets.scss";
@@ -768,6 +768,15 @@ with
 ```html
 <table class="table table-hover">
 ```
+
+9d. Commit your changes:
+
+```bash
+git add -A
+git commit -m "Added superhero Bootswatch theme."
+git tag step9
+```
+
 
 ### Bonus LAB Material
 
