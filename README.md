@@ -55,7 +55,7 @@ In this step we add some nice gems to help us with Rails development:
 * [pry-rails](https://github.com/rweng/pry-rails) - causes `rails console` to open `pry` instead of `irb`
 * [better_errors](https://github.com/charliesome/better_errors) - provides improved Rails error pages
 
-2a. Edit Gemfile and add the following gems:
+2a. Edit the `Gemfile` and add the following gems:
 
 ```ruby
 gem 'bootstrap-generators', '~> 3.3.4'
@@ -119,7 +119,19 @@ git commit -m "Configured custom templates for Scaffolding"
 git tag step3
 ```
 
-### Step 4 - Configure Project for Bootstrap SASS
+### Step 4 - Configure the Project for Bootstrap SASS
+
+We will be using SASSy CSS (SCSS) for our styling and importing the Twitter
+Bootstrap SCSS files into our main `application.css.scss` file.
+
+The `bootstrap:install` command from Step 3 created the files `bootstrap-generators.scss`
+and `bootstrap-variables.scss`. We will be removing `bootstrap-generators.scss`
+and putting that code in our `application.css.scss` file. We will also rename
+`bootstrap-variables.scss` to add an '_' prefix to the name to signify that it
+is a SASS partial file.
+
+We will also create the file `_bootstrap-custom-variables.scss` to hold any custom
+Bootstrap variables assignments we may want to define.
 
 4a. Rename the `application.css` file to `application.css.scss`, remove
 `app/assets/stylesheets/bootstrap-generators.scss` and rename
@@ -131,12 +143,12 @@ rm app/assets/stylesheets/bootstrap-generators.scss
 mv app/assets/stylesheets/bootstrap-variables.scss app/assets/stylesheets/_bootstrap-variables.scss
 ```
 
-4b. Remove *everything* from `application.scss` and replace it with the following:
+4b. Remove *everything* from `application.css.scss` and replace it with the following:
 
 ```sass
 // "bootstrap-sprockets" must be imported before "bootstrap" for the icon fonts to work.
 @import "bootstrap-variables.scss";
-@import "bootstrap-custom.scss";
+@import "bootstrap-custom-variables.scss";
 @import "bootstrap-sprockets.scss";
 @import "bootstrap.scss";
 
@@ -172,7 +184,7 @@ main {
 }
 ```
 
-4c. Create the file `app/assets/stylesheets/_bootstrap-custom.scss` with the following content:
+4c. Create the file `app/assets/stylesheets/_bootstrap-custom-variables.scss` with the following content:
 
 ```sass
 // custom settings for Twitter Bootstrap
@@ -784,7 +796,7 @@ Bootswatch themes. You can learn about these at:
 ```sass
 @import "superhero-variables.scss";
 @import "bootstrap-variables.scss";
-@import "bootstrap-custom.scss";
+@import "bootstrap-custom-variables.scss";
 @import "bootstrap-sprockets.scss";
 @import "bootstrap.scss";
 @import "superhero.scss";
