@@ -337,6 +337,8 @@ git tag step5
 
 ### Step 6 - Add MVC CRUD for the TODOs
 
+We are finally ready to generate the MVC CRUD code for our TODOs list.
+
 6a. Generate the MVC CRUD for TODOs:
 
 ```bash
@@ -443,9 +445,11 @@ Let's reflect on what we have done:
 * Created MVC CRUD for a list of TODOs
 
 But we have one *major* problem: how do we support multiple users each with
-their own TODO list?
+their own TODO list? To do that we need to add Authentication, Authorization,
+and Session Management to our app. But first, lets discuss some security
+concepts:
 
-### Let's talk about login id, passwords and session management:
+Let's talk about login id, passwords and session management:
 
 * login_id               - we will use their email address
 * password complexity    - we will use a REGEX
@@ -454,6 +458,9 @@ their own TODO list?
 * keep user sessions     - use browser cookie containing a `remember_token` that is persisted in database
 
 ### Step 7 - Add MVC CRUD for User
+
+To add AuthN/AuthZ and Session Management, we first need to add a User model
+and its associated MVC CRUD operations to our app.
 
 7a. Scaffold out the MVC CRUD for a User
 
@@ -524,7 +531,10 @@ belongs_to :user
 7h. Edit `app/controllers/users_controller.rb` and near the bottom replace the
 following line:
 
-`params.require(:user).permit(:first_name, :last_name, :email, :password_digest, :remember_token)` with
+`params.require(:user).permit(:first_name, :last_name, :email, :password_digest, :remember_token)`
+
+with
+
 `params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)`
 
 7i. Edit `app/views/users/_form.html.erb` and change the `password_digest` and
