@@ -1,7 +1,22 @@
 # TODO CRUD App in Rails
 
-This is a simple Rails App for a TODO list. The steps below will demonstrate
-how to create this project from scratch:
+This is a simple Rails App for a TODO list. This app uses the following technologies:
+
+* [Ruby 2.2](https://www.ruby-lang.org/)
+* [Rails 4.2](http://rubyonrails.org/)
+* [PostgreSQL 9.4](http://www.postgresql.org/)
+* [Twitter Bootstrap 3.3](http://getbootstrap.com/)
+* [SASS 3.4](http://sass-lang.com/)
+* [bootstrap-generators 3.3](https://github.com/decioferreira/bootstrap-generators)
+
+We begin by building a simple Rails TODO app that uses SASS and Twitter Bootstrap for styling,
+and then add Authentication, Session Management, and Authorization. For
+educational purposes we are not using a 3rd party authentication library but
+we instead will build our own authentication and authorization as we go. For
+those who would like to investigate a 3rd party library for authentication and
+authorization, I recommend taking a look at [Devise](http://devise.plataformatec.com.br/).
+
+The steps below will demonstrate how to create this project from scratch:
 
 * [`Step 1 - Generate The Project`](#step-1---generate-the-project)
 * [`Step 2 - Add Gems`](#step-2---add-gems)
@@ -25,7 +40,7 @@ how to create this project from scratch:
 ```bash
 rails new --database=postgresql --skip-test-unit todo_app_auth
 cd todo_app_auth
-rake db:create db:migrate
+rake db:create
 git init
 git add -A
 git commit -m "Created Rails project."
@@ -34,10 +49,15 @@ git tag step1
 
 ### Step 2 - Add Gems
 
+In this step we add some nice gems to help us with Rails development:
+
+* [bootstrap-generators](https://github.com/decioferreira/bootstrap-generators) - adds Twitter Bootstrap styling to our rails generated views, see further discussion in Step 3 below.
+* [pry-rails](https://github.com/rweng/pry-rails) - causes `rails console` to open `pry` instead of `irb`
+* [better_errors](https://github.com/charliesome/better_errors) - provides improved Rails error pages
+
 2a. Edit Gemfile and add the following gems:
 
 ```ruby
-
 gem 'bootstrap-generators', '~> 3.3.4'
 
 gem 'bcrypt', '~> 3.1.7'                # uncomment this line
@@ -61,6 +81,17 @@ git tag step2
 ```
 
 ### Step 3 - Configure Scaffold Generator
+
+For this project we will be using rails generators to scaffold some of our
+MVC code. We will also be using the SASS/SCSS version of [Twitter Bootstrap](http://getbootstrap.com/)
+for styling.
+
+Unfortunately, the out-of-the-box rails generators produce views that are not
+easily compatible with Twitter Bootstrap. So we need to customize the generators
+to produce view code that contains Bootstrap styling. Fortunately there exists
+a gem called [bootstrap-generators](https://github.com/decioferreira/bootstrap-generators)
+that will assist us in this task.
+
 
 3a. Install the custom templates:
 
@@ -186,10 +217,12 @@ rails g controller static_pages home about
 <h2>A Simple TODO App with User Authentication</h2>
 <h4>Technologies include:</h4>
 <ul>
-  <li>Ruby 2.2</li>
-  <li>Rails 4.2</li>
-  <li>PostgreSQL 9.4</li>
-  <li>Bootstrap 3.3</li>
+  <li><a href="https://www.ruby-lang.org/">Ruby 2.2</a></li>
+  <li><a href="http://rubyonrails.org/">Rails 4.2</a></li>
+  <li><a href="http://www.postgresql.org/">PostgreSQL 9.4</a></li>
+  <li><a href="http://getbootstrap.com/">Twitter Bootstrap 3.3</a></li>
+  <li><a href="http://sass-lang.com/">SASS 3.4</a></li>
+  <li><a href="https://github.com/decioferreira/bootstrap-generators">bootstrap-generators 3.3</a></li>
 </ul>
 ```
 
@@ -795,4 +828,4 @@ git tag step9
 * Add some more attributes to a TODO, such as a `due_date` and a `priority`.
 * Add a set of `keywords` to a Todo. There should be a `many-to-many` relationship
   between `todos` and `keywords` and the code should *not* create duplicate keywords.
-* Replace the manual authentication with a gem like [devise](http://devise.plataformatec.com.br/).
+* Replace the manual authentication with a gem like [Devise](http://devise.plataformatec.com.br/).
