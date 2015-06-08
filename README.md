@@ -22,7 +22,7 @@ The steps below will demonstrate how to create this project from scratch:
 * [`Step 2 - Add Gems`](#step-2---add-gems)
 * [`Step 3 - Configure Scaffold Generator`](#step-3---configure-scaffold-generator)
 * [`Step 4 - Configure Project for Bootstrap SASS`](#step-4---configure-project-for-bootstrap-sass)
-* [`Step 5 - Create a Static Pages Controller and Views, the NavBar, and Flash Messages`](#step-5---create-a-static-pages-controller-and-views-the-navbar-and-flash-messages)
+* [`Step 5 - Create a Static Pages Controller and Views, the NavBar, and the Flash Messages Support`](#step-5---create-a-static-pages-controller-and-views-the-navbar-and-the-flash-messages-support)
 * [`Step 6 - Add MVC CRUD for the TODOs`](#step-6---add-mvc-crud-for-the-todos)
 * [`Intermission`](#intermission)
 * [`Step 7 - Add MVC CRUD for User`](#step-7---add-mvc-crud-for-user)
@@ -199,7 +199,7 @@ git commit -m "Configured for Bootstrap SASS"
 git tag step4
 ```
 
-### Step 5 - Create a Static Pages Controller and Views, the NavBar, and Flash Messages
+### Step 5 - Create a Static Pages Controller and Views, the NavBar, and the Flash Messages Support
 
 We will generate a `static-pages-controller` and its related views that define
 two static pages: a *home* page and an *about* page. We will also move the
