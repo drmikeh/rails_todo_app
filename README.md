@@ -21,13 +21,13 @@ The steps below will demonstrate how to create this project from scratch:
 * [`Step 1 - Generate The Project`](#step-1---generate-the-project)
 * [`Step 2 - Add Gems`](#step-2---add-gems)
 * [`Step 3 - Configure Scaffold Generator`](#step-3---configure-scaffold-generator)
-* [`Step 4 - Configure Project for Bootstrap SASS`](#step-4---configure-project-for-bootstrap-sass)
+* [`Step 4 - Configure the Project for SASS and Bootstrap`](#step-4---configure-the-project-for-sass-and-bootstrap)
 * [`Step 5 - Create a Static Pages Controller and Views, the NavBar, and the Flash Messages Support`](#step-5---create-a-static-pages-controller-and-views-the-navbar-and-the-flash-messages-support)
 * [`Step 6 - Add MVC CRUD for the TODOs`](#step-6---add-mvc-crud-for-the-todos)
 * [`Intermission`](#intermission)
 * [`Step 7 - Add MVC CRUD for User`](#step-7---add-mvc-crud-for-user)
 * [`Step 8 - Create a Sessions Controller`](#step-8---create-a-sessions-controller)
-* [`Step 9 - Add a Nice Bootswatch Theme`](#step-8---create-a-sessions-controller)
+* [`Step 9 - Add a Nice Bootswatch Theme`](#step-9---add-a-nice-bootswatch-theme)
 * [`Bonus LAB Material`](#bonus-lab-material)
 
 ## Steps to reproduce
@@ -119,7 +119,7 @@ git commit -m "Configured custom templates for Scaffolding"
 git tag step3
 ```
 
-### Step 4 - Configure the Project for Bootstrap SASS
+### Step 4 - Configure the Project for SASS and Bootstrap
 
 We will be using SASSy CSS (SCSS) for our styling and importing the Twitter
 Bootstrap SCSS files into our main `application.css.scss` file.
