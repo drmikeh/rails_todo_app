@@ -531,11 +531,23 @@ belongs_to :user
 7h. Edit `app/controllers/users_controller.rb` and near the bottom replace the
 following line:
 
-`params.require(:user).permit(:first_name, :last_name, :email, :password_digest, :remember_token)`
+```ruby
+params.require(:user).permit(:first_name,
+                             :last_name,
+                             :email,
+                             :password_digest,
+                             :remember_token)
+```
 
 with
 
-`params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)`
+```ruby
+params.require(:user).permit(:first_name,
+                             :last_name,
+                             :email,
+                             :password,
+                             :password_confirmation)
+```
 
 7i. Edit `app/views/users/_form.html.erb` and change the `password_digest` and
 `remember_token` input labels and fields to:
