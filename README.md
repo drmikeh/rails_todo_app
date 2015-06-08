@@ -35,7 +35,7 @@ The steps below will demonstrate how to create this project from scratch:
 ### Step 1 - Generate The Project
 
 1a. Generate a new Rails project and initialize the GIT repo:
-> Note that the `rails new` command will create a new subdirectory for you
+> Note that the `rails new` command will create a new subdirectory for you.
 
 ```bash
 rails new --database=postgresql --skip-test-unit todo_app_auth
@@ -201,18 +201,28 @@ git tag step4
 
 ### Step 5 - Create a Static Pages Controller and Views, the NavBar, and Flash Messages
 
+We will generate a `static-pages-controller` and its related views that define
+two static pages: a *home* page and an *about* page. We will also move the
+*navbar* that was generated in Step 2 via the `rails generate bootstrap:install -f`
+command into a separate `html` partial file along with creating a partial file
+to hold just the *navbar* links. Finally we will create a *messages* `html`
+partial file for styling the Rails generated flash messages / alerts that
+indicate when an action was successful or failed.
+
+5a. Generate the `static-pages-controller` and its related views:
+
 ```bash
 rails g controller static_pages home about
 ```
 
-5a. Edit `config/routes.rb` and replace the `static_pages` routes with the following:
+5b. Edit `config/routes.rb` and replace the `static_pages` routes with the following:
 
 ```ruby
   root to: 'static_pages#home'
   match '/about', to: 'static_pages#about', via: 'get'
 ```
 
-5b. Edit `app/views/static_pages/home.html.erb` and replace the content with:
+5c. Edit `app/views/static_pages/home.html.erb` and replace the content with:
 
 ```html
 <div class="text-center jumbotron">
@@ -222,7 +232,7 @@ rails g controller static_pages home about
 </div>
 ```
 
-5c. Edit `app/views/static_pages/about.html.erb` and replace the content with:
+5d. Edit `app/views/static_pages/about.html.erb` and replace the content with:
 
 ```html
 <% provide(:title, 'About') %>
@@ -238,7 +248,7 @@ rails g controller static_pages home about
 </ul>
 ```
 
-5d. Edit `app/views/layouts/application.html.erb` to set a dynamic title and
+5e. Edit `app/views/layouts/application.html.erb` to set a dynamic title and
 replace the body with that provided below:
 
 ```html
@@ -257,7 +267,7 @@ replace the body with that provided below:
   </body>
 ```
 
-5e. Create the file `app/views/layouts/_navigation.html.erb` with the following content:
+5f. Create the file `app/views/layouts/_navigation.html.erb` with the following content:
 
 ```html
 <%# navigation styled for Bootstrap 3.0 %>
@@ -281,13 +291,13 @@ replace the body with that provided below:
 </nav>
 ```
 
-5f. Create the file `app/views/layouts/_navigation_links.html.erb` with the following content:
+5g. Create the file `app/views/layouts/_navigation_links.html.erb` with the following content:
 
 ```html
 <li><%= link_to 'About', '/about' %></li>
 ```
 
-5g. Create the file `app/views/layouts/_messages.html.erb`:
+5h. Create the file `app/views/layouts/_messages.html.erb`:
 
 ```html
 <%# Rails flash messages styled for Bootstrap 3.0 %>
@@ -301,7 +311,7 @@ replace the body with that provided below:
 <% end %>
 ```
 
-5h. Edit the file `app/helpers/application_helper.rb` and set the content to:
+5i. Edit the file `app/helpers/application_helper.rb` and set the content to:
 
 ```ruby
 module ApplicationHelper
@@ -317,7 +327,7 @@ module ApplicationHelper
 end
 ```
 
-5i. Commit your changes:
+5j. Commit your changes:
 
 ```bash
 git add -A
