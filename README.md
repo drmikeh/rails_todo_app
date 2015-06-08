@@ -584,19 +584,21 @@ git tag step7
 
 ### Step 8 - Create a Sessions Controller
 
+In this step we will create a `SessionsController` to handle our *sign-in* via
+its `new` and `create` actions and *sign-out* via its `destroy` action. We will
+also modify the `UsersController` so that its `new` and `create` actions will
+handle *sign-up* (i.e. registration). We will also create a `SessionsHelper`
+module to provide common authentication and session management support. Finally
+we will add dynamically controlled navigation links so that the appropriate
+links appear on the `navbar` depending on whether the user is currently signed in.
+
 8a. Create `app/controllers/sessions_controller.rb` and `app/views/sessions/new.html.erb`
 
 ```bash
-rails g controller sessions new create destroy
+rails g controller sessions new
 ```
 
-8b. Remove the files `app/views/sessions/create.html.erb` and `app/views/sessions/destroy.html.erb`
-
-```bash
-rm app/views/sessions/create.html.erb app/views/sessions/destroy.html.erb
-```
-
-8c. Edit `app/views/sessions/new.html.erb` and insert the following content:
+8b. Edit `app/views/sessions/new.html.erb` and insert the following content:
 
 ```html
 <% provide(:title, "Sign in") %>
@@ -620,7 +622,7 @@ rm app/views/sessions/create.html.erb app/views/sessions/destroy.html.erb
 </div>
 ```
 
-8d. Add the following to `app/helpers/sessions_helper.rb`:
+8c. Add the following to `app/helpers/sessions_helper.rb`:
 
 ```ruby
 module SessionsHelper
@@ -677,7 +679,7 @@ module SessionsHelper
 end
 ```
 
-8e. Edit `app/controllers/sessions_controller.rb` to be the following:
+8d. Edit `app/controllers/sessions_controller.rb` to have the following content:
 
 ```ruby
 class SessionsController < ApplicationController
@@ -703,7 +705,7 @@ class SessionsController < ApplicationController
 end
 ```
 
-8f. Edit `app/controllers/users_controller.rb`:
+8e. Edit `app/controllers/users_controller.rb`:
 
 * modify the `create` method to call the `sign_in` helper method
   and change the `redirect_to` target path and notice:
@@ -725,7 +727,7 @@ end
   end
 ```
 
-8g. Edit `config/routes.rb` and replace
+8f. Edit `config/routes.rb` and replace
 
 ```ruby
   get 'sessions/new'
@@ -746,13 +748,13 @@ and add the following:
   match '/signout', to: 'sessions#destroy',     via: 'delete'
 ```
 
-8h. Edit `app/controllers/application_controller.rb` and add the following line:
+8g. Edit `app/controllers/application_controller.rb` and add the following line:
 
 ```ruby
   include SessionsHelper
 ```
 
-8i. Edit `app/controllers/static_pages_controller.rb` and add a redirect to the
+8h. Edit `app/controllers/static_pages_controller.rb` and add a redirect to the
   `home` action:
 
 ```ruby
@@ -761,7 +763,7 @@ and add the following:
   end
 ```
 
-8j. Edit `app/controllers/todos_controller.rb`:
+8i. Edit `app/controllers/todos_controller.rb`:
 
 * add `before_action :signed_in_user`
 * edit the `create` method:
@@ -781,7 +783,7 @@ and add the following:
     ...
 ```
 
-8k. Update `app/views/layouts/_navigation_links.html.erb` to match the following:
+8j. Update `app/views/layouts/_navigation_links.html.erb` to match the following:
 
 ```html
 <% if signed_in? %>
@@ -795,7 +797,7 @@ and add the following:
 <li><%= link_to 'About', '/about' %></li>
 ```
 
-8l. Edit `app/views/static_pages/home.html.erb` and add the following buttons
+8k. Edit `app/views/static_pages/home.html.erb` and add the following buttons
   to the bottom of the jumbotron:
 
 ```html
@@ -804,7 +806,7 @@ and add the following:
   <%= link_to "Sign in",      signin_path, class: "btn btn-large btn-primary" %>
 ```
 
-8m. Commit your changes:
+8l. Commit your changes:
 
 ```bash
 git add -A
@@ -814,9 +816,9 @@ git tag step8
 
 ### Step 9 - Add a Nice Bootswatch Theme
 
-> Note: since we are using SASS it is best to use a SASSy version of the
-Bootswatch themes. You can learn about these at:
-[Bootswatch SCSS](https://github.com/log0ymxm/bootswatch-scss)
+In this step we will add a [Bootswatch](https://bootswatch.com/) theme to our
+project, but instead of copying the bootswatch css into our project we will
+use a SASSy version of Bootswatch called [Bootswatch-Sass](https://github.com/log0ymxm/bootswatch-scss).
 
 9a. Create the following files:
 
