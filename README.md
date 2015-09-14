@@ -521,6 +521,7 @@ params.require(:user).permit(:first_name,
 7i. Edit `app/views/users/_form.html.erb` and change the `password_digest` and `remember_token` input labels and fields to:
 
 ```html
+  <div class="form-group">
     <%= f.label :password, class: "col-sm-2 control-label" %>
     <div class="col-sm-10">
       <%= f.password_field :password, class: "form-control" %>
