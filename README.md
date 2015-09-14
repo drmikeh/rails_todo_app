@@ -9,12 +9,7 @@ This is a simple Rails App for a TODO list. This app uses the following technolo
 * [SASS 3.4](http://sass-lang.com/)
 * [bootstrap-generators 3.3](https://github.com/decioferreira/bootstrap-generators)
 
-We begin by building a simple Rails TODO app that uses SASS and Twitter Bootstrap for styling,
-and then add Authentication, Session Management, and Authorization. For
-educational purposes we are not using a 3rd party authentication library but
-we instead will build our own authentication and authorization as we go. For
-those who would like to investigate a 3rd party library for authentication and
-authorization, I recommend taking a look at [Devise](http://devise.plataformatec.com.br/).
+We begin by building a simple Rails TODO app that uses SASS and Twitter Bootstrap for styling, and then add Authentication, Session Management, and Authorization. For educational purposes we are not using a 3rd party authentication library but we instead will build our own authentication and authorization as we go. For those who would like to investigate a 3rd party library for authentication and authorization, I recommend taking a look at [Devise](http://devise.plataformatec.com.br/).
 
 The steps below will demonstrate how to create this project from scratch:
 
@@ -82,16 +77,9 @@ git tag step2
 
 ### Step 3 - Configure Scaffold Generator
 
-For this project we will be using rails generators to scaffold some of our
-MVC code. We will also be using the SASS/SCSS version of [Twitter Bootstrap](http://getbootstrap.com/)
-for styling.
+For this project we will be using rails generators to scaffold some of our MVC code. We will also be using the SASS/SCSS version of [Twitter Bootstrap](http://getbootstrap.com/) for styling.
 
-Unfortunately, the out-of-the-box rails generators produce views that are not
-easily compatible with Twitter Bootstrap. So we need to customize the generators
-to produce view code that contains Bootstrap styling. Fortunately there exists
-a gem called [bootstrap-generators](https://github.com/decioferreira/bootstrap-generators)
-that will assist us in this task.
-
+Unfortunately, the out-of-the-box rails generators produce views that are not easily compatible with Twitter Bootstrap. So we need to customize the generators to produce view code that contains Bootstrap styling. Fortunately there exist a gem called [bootstrap-generators](https://github.com/decioferreira/bootstrap-generators) that will assist us in this task.
 
 3a. Install the custom templates:
 
@@ -121,17 +109,11 @@ git tag step3
 
 ### Step 4 - Configure the Project for SASS and Bootstrap
 
-We will be using SASSy CSS (SCSS) for our styling and importing the Twitter
-Bootstrap SCSS files into our main `application.css.scss` file.
+We will be using SASSy CSS (SCSS) for our styling and importing the Twitter Bootstrap SCSS files into our main `application.css.scss` file.
 
-The `bootstrap:install` command from Step 3 created the files `bootstrap-generators.scss`
-and `bootstrap-variables.scss`. We will be removing `bootstrap-generators.scss`
-and putting that code in our `application.css.scss` file. We will also rename
-`bootstrap-variables.scss` to add an '_' prefix to the name to signify that it
-is a SASS partial file.
+The `bootstrap:install` command from Step 3 created the files `bootstrap-generators.scss` and `bootstrap-variables.scss`. We will be removing `bootstrap-generators.scss` and putting that code in our `application.css.scss` file. We will also rename `bootstrap-variables.scss` to add an '_' prefix to the name to signify that it is a SASS partial file.
 
-We will also create the file `_bootstrap-custom-variables.scss` to hold any custom
-Bootstrap variables assignments we may want to define.
+We will also create the file `_bootstrap-custom-variables.scss` to hold any custom Bootstrap variables assignments we may want to define.
 
 4a. Rename the `application.css` file to `application.css.scss`, remove
 `app/assets/stylesheets/bootstrap-generators.scss` and rename
@@ -201,13 +183,7 @@ git tag step4
 
 ### Step 5 - Create a Static Pages Controller and Views, the NavBar, and the Flash Messages Support
 
-We will generate a `static-pages-controller` and its related views that define
-two static pages: a *home* page and an *about* page. We will also move the
-*navbar* that was generated in Step 2 via the `rails generate bootstrap:install -f`
-command into a separate `html` partial file along with creating a partial file
-to hold just the *navbar* links. Finally we will create a *messages* `html`
-partial file for styling the Rails generated flash messages / alerts that
-indicate when an action was successful or failed.
+We will generate a `static-pages-controller` and its related views that define two static pages: a *home* page and an *about* page. We will also move the *navbar* that was generated in Step 2 via the `rails generate bootstrap:install -f` command into a separate `html` partial file along with creating a partial file to hold just the *navbar* links. Finally we will create a *messages* `html` partial file for styling the Rails generated flash messages / alerts that indicate when an action was successful or failed.
 
 5a. Generate the `static-pages-controller` and its related views:
 
@@ -248,8 +224,7 @@ rails g controller static_pages home about
 </ul>
 ```
 
-5e. Edit `app/views/layouts/application.html.erb` to set a dynamic title and
-replace the body with that provided below:
+5e. Edit `app/views/layouts/application.html.erb` to set a dynamic title and replace the body with that provided below:
 
 ```html
     <title><%= full_title(yield(:title)) %></title>
@@ -444,10 +419,7 @@ Let's reflect on what we have done:
 * Created some static pages, a navbar, and flash message support
 * Created MVC CRUD for a list of TODOs
 
-But we have one *major* problem: how do we support multiple users each with
-their own TODO list? To do that we need to add Authentication, Authorization,
-and Session Management to our app. But first, lets discuss some security
-concepts:
+But we have one *major* problem: how do we support multiple users each with their own TODO list? To do that we need to add Authentication, Authorization, and Session Management to our app. But first, lets discuss some security concepts:
 
 Let's talk about login id, passwords and session management:
 
@@ -459,8 +431,7 @@ Let's talk about login id, passwords and session management:
 
 ### Step 7 - Add MVC CRUD for User
 
-To add AuthN/AuthZ and Session Management, we first need to add a User model
-and its associated MVC CRUD operations to our app.
+To add AuthN/AuthZ and Session Management, we first need to add a User model and its associated MVC CRUD operations to our app.
 
 7a. Scaffold out the MVC CRUD for a User
 
@@ -477,8 +448,7 @@ rails g scaffold user first_name:string last_name:string email:string:uniq passw
 rails g migration AddUserRefToTodos user:references
 ```
 
-7d. Edit the `add_user_ref_to_todos` migration script and add a not-null
-constraint: `null: false`
+7d. Edit the `add_user_ref_to_todos` migration script and add a not-null constraint: `null: false`
 
 7e. Run the migrations:
 
@@ -528,8 +498,7 @@ end
 belongs_to :user
 ```
 
-7h. Edit `app/controllers/users_controller.rb` and near the bottom replace the
-following line:
+7h. Edit `app/controllers/users_controller.rb` and near the bottom replace the following line:
 
 ```ruby
 params.require(:user).permit(:first_name,
@@ -549,8 +518,7 @@ params.require(:user).permit(:first_name,
                              :password_confirmation)
 ```
 
-7i. Edit `app/views/users/_form.html.erb` and change the `password_digest` and
-`remember_token` input labels and fields to:
+7i. Edit `app/views/users/_form.html.erb` and change the `password_digest` and `remember_token` input labels and fields to:
 
 ```html
     <%= f.label :password, class: "col-sm-2 control-label" %>
@@ -568,11 +536,9 @@ params.require(:user).permit(:first_name,
 
 7j. Edit `app/views/users/edit.html.erb` and remove the `Back` button
 
-7k. Edit `app/views/users/new.html.erb` and remove the `Back` button and replace
-`<h1>New user</h1>` with `<h1>Sign Up</h1>`
+7k. Edit `app/views/users/new.html.erb` and remove the `Back` button and replace `<h1>New user</h1>` with `<h1>Sign Up</h1>`
 
-7l. Edit `app/views/users/show.html.erb` and remove the `Back` button and the
-`password_digest` and `remember_token` fields.
+7l. Edit `app/views/users/show.html.erb` and remove the `Back` button and the `password_digest` and `remember_token` fields.
 
 7m. Commit your changes:
 
@@ -584,13 +550,7 @@ git tag step7
 
 ### Step 8 - Create a Sessions Controller
 
-In this step we will create a `SessionsController` to handle our *sign-in* via
-its `new` and `create` actions and *sign-out* via its `destroy` action. We will
-also modify the `UsersController` so that its `new` and `create` actions will
-handle *sign-up* (i.e. registration). We will also create a `SessionsHelper`
-module to provide common authentication and session management support. Finally
-we will add dynamically controlled navigation links so that the appropriate
-links appear on the `navbar` depending on whether the user is currently signed in.
+In this step we will create a `SessionsController` to handle our *sign-in* via its `new` and `create` actions and *sign-out* via its `destroy` action. We will also modify the `UsersController` so that its `new` and `create` actions will handle *sign-up* (i.e. registration). We will also create a `SessionsHelper` module to provide common authentication and session management support. Finally we will add dynamically controlled navigation links so that the appropriate links appear on the `navbar` depending on whether the user is currently signed in.
 
 8a. Create `app/controllers/sessions_controller.rb` and `app/views/sessions/new.html.erb`
 
@@ -707,8 +667,7 @@ end
 
 8e. Edit `app/controllers/users_controller.rb`:
 
-* modify the `create` method to call the `sign_in` helper method
-  and change the `redirect_to` target path and notice:
+Modify the `create` method to call the `sign_in` helper method and change the `redirect_to` target path and notice:
 
 ```ruby
   def create
@@ -797,8 +756,7 @@ and add the following:
 <li><%= link_to 'About', '/about' %></li>
 ```
 
-8k. Edit `app/views/static_pages/home.html.erb` and add the following buttons
-  to the bottom of the jumbotron:
+8k. Edit `app/views/static_pages/home.html.erb` and add the following buttons to the bottom of the jumbotron:
 
 ```html
   <br/>
@@ -816,9 +774,7 @@ git tag step8
 
 ### Step 9 - Add a Nice Bootswatch Theme
 
-In this step we will add a [Bootswatch](https://bootswatch.com/) theme to our
-project, but instead of copying the bootswatch css into our project we will
-use a SASSy version of Bootswatch called [Bootswatch-Sass](https://github.com/log0ymxm/bootswatch-scss).
+In this step we will add a [Bootswatch](https://bootswatch.com/) theme to our project, but instead of copying the bootswatch css into our project we will use a SASSy version of Bootswatch called [Bootswatch-Sass](https://github.com/log0ymxm/bootswatch-scss).
 
 9a. Create the following files:
 
@@ -856,7 +812,6 @@ git commit -m "Added superhero Bootswatch theme."
 git tag step9
 ```
 
-
 ### Bonus LAB Material
 
 * Check for security holes and fix them:
@@ -872,6 +827,5 @@ git tag step9
   - Change the NavBar.
 * Add some more information to a user, such as `phone`, `city` and `state`, `occupation`, etc.
 * Add some more attributes to a TODO, such as a `due_date` and a `priority`.
-* Add a set of `keywords` to a Todo. There should be a `many-to-many` relationship
-  between `todos` and `keywords` and the code should *not* create duplicate keywords.
+* Add a set of `keywords` to a Todo. There should be a `many-to-many` relationship between `todos` and `keywords` and the code should *not* create duplicate keywords.
 * Replace the manual authentication with a gem like [Devise](http://devise.plataformatec.com.br/).
