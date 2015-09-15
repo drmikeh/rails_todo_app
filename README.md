@@ -235,7 +235,7 @@ rails g controller static_pages home about
     <header>
       <%= render 'layouts/navigation' %>
     </header>
-    <main role="main">
+    <main role="main" class="container-fluid">
        <%= render 'layouts/messages' %>
        <%= yield %>
     </main>
@@ -365,7 +365,7 @@ end
 * edit the `<h1>` tag
 * add a `todos` CSS class to the outer `div`
 * add the `Show`, `Edit`, and `Destroy` labels on the table headers
-* replace the boolean `completed` value with an icon
+* replace the boolean `completed` value with a link and an icon
 
 ```html
 <h1>Here are your TODOs</h1>
@@ -376,11 +376,16 @@ end
         <th>Edit</th>
         <th>Destroy</th>
 ...
+        <!-- <td><%= todo.completed %></td> -->
+        <td>
+        <%= link_to("/todos/#{todo.id}/toggle_completed") do %>
           <% if todo.completed %>
-          <td><span class="glyphicon glyphicon-ok"></span></td>
+            <span class="glyphicon glyphicon-ok"></span>
           <% else %>
-          <td></td>
+            <span class="glyphicon glyphicon-unchecked"></span>
           <% end %>
+         <% end %>
+        </td>
 ```
 
 6g. Edit `app/views/todos/show.html.erb` and add the created_at attribute:
@@ -400,7 +405,31 @@ end
 `redirect_to @todo` and `redirect_to todos_url` with
 `redirect_to todos_path`
 
-6i. Commit your changes:
+* add a `toggle_completed` method:
+
+```ruby
+def toggle_completed
+  @todo.completed = !@todo.completed
+  respond_to do |format|
+    if @todo.save
+      format.html { redirect_to todos_path }
+      format.json { render :show, status: :ok, location: @todo }
+    else
+      # show some error message
+    end
+  end
+end
+```
+
+6i. Add a route for the `toggle_completed` action:
+
+Edit `config/routes.rb` and add the following line:
+
+```ruby
+  match 'todos/:id/toggle_completed', to: 'todos#toggle_completed', via: 'get'
+```
+
+6j. Commit your changes:
 
 ```bash
 git add -A
@@ -478,12 +507,20 @@ class User < ActiveRecord::Base
 
   validates :password, length: { minimum: 8, maximum: 20 }
 
-  def User.new_remember_token
+  validate :password_complexity
+
+  def self.new_remember_token
     SecureRandom.urlsafe_base64
   end
 
-  def User.digest(token)
+  def self.digest(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  def password_complexity
+    if password.present? and not password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)./)
+      errors.add :password, "must include at least one lowercase letter, one uppercase letter, and one digit"
+    end
   end
 
   def to_s
@@ -556,7 +593,7 @@ In this step we will create a `SessionsController` to handle our *sign-in* via i
 8a. Create `app/controllers/sessions_controller.rb` and `app/views/sessions/new.html.erb`
 
 ```bash
-rails g controller sessions new
+rails g controller sessions new create destroy
 ```
 
 8b. Edit `app/views/sessions/new.html.erb` and insert the following content:
@@ -602,6 +639,7 @@ module SessionsHelper
     !current_user.nil?
   end
 
+  # set the current_user from the remember_token cookie
   def current_user=(user)
     @current_user = user
   end
@@ -611,10 +649,12 @@ module SessionsHelper
     @current_user ||= User.find_by(remember_token: remember_token)
   end
 
+  # check if the specified user is the current user
   def current_user?(user)
     user == current_user
   end
 
+  # security check, ensure user is signed in, if not, redirect to signin page.
   def signed_in_user
     unless signed_in?
       store_location
@@ -629,11 +669,13 @@ module SessionsHelper
     self.current_user = nil
   end
 
+  # redirect back to the original requested view or to default
   def redirect_back_or(default)
     redirect_to(session[:return_to] || default)
     session.delete(:return_to)
   end
 
+  # store the current location to support the redirect_back feature
   def store_location
     session[:return_to] = request.url if request.get?
   end
@@ -726,7 +768,7 @@ and add the following:
 8i. Edit `app/controllers/todos_controller.rb`:
 
 * add `before_action :signed_in_user`
-* edit the `create` method:
+* edit the `index` method:
 
 ```ruby
   def index
@@ -734,7 +776,7 @@ and add the following:
   end
 ```
 
- * add the user to a newly created Todo:
+ * edit the `create` method to associate the user to a newly created Todo:
 
 ```ruby
   def create
@@ -830,3 +872,43 @@ git tag step9
 * Add some more attributes to a TODO, such as a `due_date` and a `priority`.
 * Add a set of `keywords` to a Todo. There should be a `many-to-many` relationship between `todos` and `keywords` and the code should *not* create duplicate keywords.
 * Replace the manual authentication with a gem like [Devise](http://devise.plataformatec.com.br/).
+
+
+### Step 10 - Patch Security Holes
+
+10a. Edit `app/controllers/users_controller.rb` and do the following:
+
+* Add the following before actions:
+
+```ruby
+   before_action :signed_in_user, only: [:index, :show, :edit, :update, :destroy]
+   before_action :verify_correct_user, only: [:show, :edit, :update, :destroy]
+```
+
+* Add the `verify_correct_user` private method:
+
+```ruby
+     def verify_correct_user
+       user = User.find_by(id: params[:id])
+       redirect_to root_url, notice: 'Access Denied!' unless current_user?(user)
+     end
+```
+
+10b. Edit `app/controllers/todos_controller.rb` and do the following:
+
+* Add the following before actions:
+
+```ruby
+  before_action :signed_in_user
+  before_action :set_todo, only: [:toggle_completed, :show, :edit, :update, :destroy]
+  before_action :verify_correct_user, only: [:show, :edit, :update, :destroy]
+```
+
+* Add the `verify_correct_user` private method:
+
+```ruby
+     def verify_correct_user
+       @todo = current_user.todos.find_by(id: params[:id])
+       redirect_to root_url, notice: 'Access Denied!' if @todo.nil?
+     end
+```

@@ -1,7 +1,19 @@
 class TodosController < ApplicationController
   before_action :signed_in_user
-  before_action :correct_user, only: [:show, :edit, :update, :destroy]
-  before_action :set_todo, only: [:show, :edit, :update, :destroy]
+  before_action :set_todo, only: [:toggle_completed, :show, :edit, :update, :destroy]
+  before_action :verify_correct_user, only: [:show, :edit, :update, :destroy]
+
+  def toggle_completed
+    @todo.completed = !@todo.completed
+    respond_to do |format|
+      if @todo.save
+        format.html { redirect_to todos_path }
+        format.json { render :show, status: :ok, location: @todo }
+      else
+        # show some error message
+      end
+    end
+  end
 
   # GET /todos
   # GET /todos.json
@@ -28,6 +40,7 @@ class TodosController < ApplicationController
   def create
     @todo = Todo.new(todo_params)
     @todo.user = current_user       # associate the new todo to the current_user
+
     respond_to do |format|
       if @todo.save
         format.html { redirect_to todos_path, notice: 'Todo was successfully created.' }
@@ -74,8 +87,8 @@ class TodosController < ApplicationController
       params.require(:todo).permit(:title, :completed)
     end
 
-    def correct_user
+    def verify_correct_user
       @todo = current_user.todos.find_by(id: params[:id])
-      redirect_to root_url if @todo.nil?
+      redirect_to root_url, notice: 'Access Denied!' if @todo.nil?
     end
 end

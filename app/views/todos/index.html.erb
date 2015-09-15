@@ -21,11 +21,18 @@
     <tbody>
       <%= content_tag_for(:tr, @todos) do |todo| %>
         <td><%= todo.title %></td>
-        <% if todo.completed %>
-        <td><span class="glyphicon glyphicon-ok"></span></td>
-        <% else %>
-        <td></td>
+
+        <!-- <td><%= todo.completed %></td> -->
+        <td>
+        <%= link_to("/todos/#{todo.id}/toggle_completed") do %>
+          <% if todo.completed %>
+            <span class="glyphicon glyphicon-ok"></span>
+          <% else %>
+            <span class="glyphicon glyphicon-unchecked"></span>
+          <% end %>
         <% end %>
+        </td>
+
         <td><%= link_to 'Show', todo %></td>
         <td><%= link_to 'Edit', edit_todo_path(todo) %></td>
         <td><%= link_to 'Destroy', todo, method: :delete, data: { confirm: 'Are you sure?' } %></td>

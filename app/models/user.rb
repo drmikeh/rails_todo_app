@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-
   has_many :todos, dependent: :destroy
 
   before_save { email.downcase! }
@@ -15,12 +14,20 @@ class User < ActiveRecord::Base
 
   validates :password, length: { minimum: 8, maximum: 20 }
 
-  def User.new_remember_token
+  validate :password_complexity
+
+  def self.new_remember_token
     SecureRandom.urlsafe_base64
   end
 
-  def User.digest(token)
+  def self.digest(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  def password_complexity
+    if password.present? and not password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)./)
+      errors.add :password, "must include at least one lowercase letter, one uppercase letter, and one digit"
+    end
   end
 
   def to_s

@@ -1,12 +1,16 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user, only: [:index, :show, :edit, :update, :destroy]
-  before_action :correct_user, only: [:show, :edit, :update, :destroy]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+
+  before_action :signed_in_user, only: [:index, :show, :edit, :update, :destroy]
+  before_action :verify_correct_user, only: [:show, :edit, :update, :destroy]
 
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.json { render :show, status: :created, location: @user }
+    end
   end
 
   # GET /users/1
@@ -79,8 +83,8 @@ class UsersController < ApplicationController
                                    :password_confirmation)
     end
 
-    def correct_user
+    def verify_correct_user
       user = User.find_by(id: params[:id])
-      redirect_to root_url unless current_user?(user)
+      redirect_to root_url, notice: 'Access Denied!' unless current_user?(user)
     end
 end
