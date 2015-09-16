@@ -25,6 +25,8 @@ The steps below will demonstrate how to create this project from scratch:
 * [Step 9 - Add a Nice Bootswatch Theme](#step-9---add-a-nice-bootswatch-theme)
 * [Bonus LAB Material](#bonus-lab-material)
 * [Step 10 - Patch Security Holes](#step-10---patch-security-holes)
+* [Step 11 - Deploy to Heroku](#step-11---deploy-to-heroku)
+* [Helpful Heroku Commands](#helpful-heroku-commands)
 
 ## Steps to reproduce
 
@@ -912,4 +914,71 @@ git tag step9
        @todo = current_user.todos.find_by(id: params[:id])
        redirect_to root_url, notice: 'Access Denied!' if @todo.nil?
      end
+```
+
+### Step 11 - Deploy to Heroku
+
+11a. Make sure you have a Heroku account - https://signup.heroku.com/login
+
+11b. Download and install the Heroku Toolbelt - https://toolbelt.heroku.com/
+
+11c. Add the `rails_12factor` gem to the `Gemfile`:
+
+```ruby
+gem 'rails_12factor', group: :production
+```
+
+Then run `bundle install` and save your work:
+
+```bash
+bundle install
+git add -A
+git commit -m "Added rails_12factor"
+git tag step11
+```
+
+11d. Configure your git repo for Heroku, push to Heroku, and run a db:migrate remotely on Heroku:
+
+```bash
+heroku create
+git push heroku master
+heroku run rake db:migrate
+heroku open
+```
+
+### Helpful Heroku Commands
+
+#### Managing Your App
+
+```bash
+heroku open                                 # open your app in a browser tab
+heroku ps                                   # see the status of your heroku servers
+heroku logs                                 # view the logs
+heroku addons:create heroku-postgresql:dev  # add a PostgreSQL development DB
+heroku addons:create mongolab:sandbox       # add a MongoLab DB
+heroku run rake db:migrate                  # run db migrations
+heroku run rake db:seed                     # run seeds.rb file
+heroku run:detached rake db:migrate         # run detached from Terminal
+```
+
+#### Debugging
+
+```bash
+heroku ps             # list process status of heroku processes
+heroku releases       # list releases deployed to heroku for current app
+heroku logs           # display logs for an app
+heroku logs -n 1500   # default is 100 lines, but you can get up to 1500
+heroku login          # authenticate with heroku so that you can connect
+heroku run bash       # connect to heroku host machine
+```
+
+#### General Commands
+
+```bash
+heroku help                             # prints help
+heroku list                             # list all of your heroku apps
+heroku info                             # prints info about the heroku project
+heroku config                           # prints heroku environment variables
+heroku config:set NODE_ENV=development  # set environment variable
+heroku apps:rename <new_name>           # rename a heroku project; changes URL
 ```
