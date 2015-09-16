@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 ruby '2.2.0'
 
+gem 'rails_12factor', group: :production
+
 gem 'rails', '4.2.1'
 gem 'pg'
 gem 'sass-rails', '~> 5.0'
