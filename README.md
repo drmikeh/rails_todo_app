@@ -506,6 +506,7 @@ class User < ActiveRecord::Base
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
 
+  # Add methods to set and authenticate against a BCrypt password.
   has_secure_password
 
   validates :password, length: { minimum: 8, maximum: 20 }
