@@ -204,6 +204,7 @@ rails g controller static_pages home about
 5c. Edit `app/views/static_pages/home.html.erb` and replace the content with:
 
 ```html
+<% provide(:title, 'Home') %>
 <div class="text-center jumbotron">
   <h1>Welcome to the TODO App</h1>
   <h3>This is the home page for the Rails TODO App with AuthN and AuthZ.</h3>
