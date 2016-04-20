@@ -425,6 +425,12 @@ def toggle_completed
 end
 ```
 
+* add the `toggle_completed` method to the `before_action` that is calling the `set_todo` method:
+
+```ruby
+before_action :set_todo, only: [:show, :edit, :update, :destroy, :toggle_completed]
+```
+
 6i. Add a route for the `toggle_completed` action:
 
 Edit `config/routes.rb` and add the following line:
